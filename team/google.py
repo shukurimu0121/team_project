@@ -34,7 +34,10 @@ def get_search_results(query):
 if __name__ == '__main__':
 
     # query keyword
-    query = "apple"
+    query = "上腕二頭筋　筋トレ"
+
+    # name of muscle
+    muscle = "上腕二頭筋"
 
     # get search results
     result = get_search_results(query)
@@ -54,14 +57,21 @@ if __name__ == '__main__':
         item_dict["link"] = result_item['link']
         item_dict["snippet"] = result_item['snippet']
 
-
         # append part info into list
         result_items.append(item_dict.copy())
 
-# display result items info
-# in the future, add to the database but now this is test
-for result_item in result_items:
-    print(result_item["title"] + " " + result_item['link'] + " " + result_item['snippet'])
+    # add to the database but now this is test
+    for result_item in result_items:
+        # if the info already exits, not insert
+        url = db.execute("SELECT url FROM google WHERE url = ?", result_item["link"])[0]["link"]
+        if url != None:
+            db.execute("INSERT INTO google (url, title, snippet) VALUES(?, ?, ?)", result_item["link"], result_item["title"], result_item["snippet"])
+
+        else:
+            break
+
+
+
 
 
 
