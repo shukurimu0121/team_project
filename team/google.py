@@ -1,4 +1,3 @@
-import json
 from googleapiclient.discovery import build
 from cs50 import SQL
 
@@ -63,7 +62,7 @@ if __name__ == '__main__':
     # add to the database but now this is test
     for result_item in result_items:
         # if the info already exits, not insert
-        url = db.execute("SELECT url FROM google WHERE url = ?", result_item["link"])[0]["link"]
+        url = db.execute("SELECT url FROM google WHERE url = ?", result_item["link"])
         if url != None:
             db.execute("INSERT INTO google (url, title, snippet) VALUES(?, ?, ?)", result_item["link"], result_item["title"], result_item["snippet"])
 
