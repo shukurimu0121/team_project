@@ -1,21 +1,26 @@
 import requests
 import json
 from cs50 import SQL
+import os
+from dotenv import load_dotenv
 
 # definition of database
 db = SQL("sqlite:///team.db")
+
+# Get env variables
+load_dotenv('.env')
 
 def basic_info():
     # 初期
     config = dict()
     # アクセストークン
-    config["access_token"]         = 'EAAHsGXyOcH4BAGMba1zqqOZBszZCoBftZATq4SZBvb8K92c6XGq8QnqicKkZCwdP08MuGXJQh3g9wLpbStB2lFYMS5Quc1WM1u9j5R7r0cONZBUhCpJVtRsduIkOWXXLtKfypbto1Yd1qLQwtqZBUyhaheISH8gUMBZCe9EAw7cjWMCINrPEyJoN'
+    config["access_token"]         = os.environ.get("ACCESS_TOKEN")
     # アプリID
-    config["app_id"]               = '541069184757886'
+    config["app_id"]               = os.environ.get("APP_ID")
     # アプリシークレット
-    config["app_secret"]           = 'bd10f782ec7b256eb80bdfa10be4efaa'
+    config["app_secret"]           = os.environ.get("APP_SECRET")
     # インスタグラムビジネスアカウントID
-    config['instagram_account_id'] = "17841458117669593"
+    config['instagram_account_id'] = os.environ.get("INSTAGRAM_ACCOUNT_ID")
     # グラフバージョン
     config["version"]              = 'v16.0'
     # graphドメイン
@@ -93,28 +98,29 @@ def get_hashtag_media_top(params,hashtag_id) :
 
     return InstaApiCall(url, Params, 'GET')
 
+if __name__ == '__main__':
+    MUSCLES = ["下腿三頭筋", "棘下筋", "上腕三頭筋", "脊柱起立筋", "大腿筋", "ハムストリングス"]
 
-# 検索したいハッシュタグワードを記述
-hashtag_word = '上腕二頭筋トレ'
+    for muscle in MUSCLES:
 
-# 筋肉の名前
-muscle = "上腕二頭筋"
+        # 検索したいハッシュタグワードを記述
+        hashtag_word = muscle + 'トレ'
 
-# ハッシュタグIDを取得
-hashtag_id = get_hashtag_id(hashtag_word)
+        # ハッシュタグIDを取得
+        hashtag_id = get_hashtag_id(hashtag_word)
 
-# パラメータセット
-params = basic_info()
+        # パラメータセット
+        params = basic_info()
 
-# ハッシュタグ情報取得
-hashtag_response = get_hashtag_media_top(params,hashtag_id)
+        # ハッシュタグ情報取得
+        hashtag_response = get_hashtag_media_top(params,hashtag_id)
 
-for post in hashtag_response['json_data']['data']:
-    # 既に登録されていないか、確認
-    url = db.execute("SELECT url FROM instagram WHERE url = ?", post["permalink"])
-    if url != None:
-        db.execute("INSERT INTO instagram (url, caption, media_id, muscle) VALUES(?, ?, ?, ?)", post["permalink"], post["caption"], post["id"], muscle)
-    else:
-        break
+        for post in hashtag_response['json_data']['data']:
+            # 既に登録されていないか、確認
+            url = db.execute("SELECT url FROM instagram WHERE url = ?", post["permalink"])
+            if url != None:
+                db.execute("INSERT INTO instagram (url, caption, media_id, muscle) VALUES(?, ?, ?, ?)", post["permalink"], post["caption"], post["id"], muscle)
+            else:
+                break
 
 
