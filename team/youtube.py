@@ -38,12 +38,12 @@ if __name__ == '__main__':
 
         for response in responses:
             video_title = response["snippet"]["title"]
-            video_url = "https://www.youtube.com/watch?v=" + response["id"]["videoID"]
+            video_url = "https://www.youtube.com/watch?v=" + response["id"]["videoId"]
             caption = response["snippet"]["description"]
-            channnel_title = response["channelTitle"]
-            channel_url = "https://www.youtube.com/channel/" + response["snippet"]["channelID"]
+            channel_title = response["snippet"]["channelTitle"]
+            channel_url = "https://www.youtube.com/channel/" + response["snippet"]["channelId"]
 
-            url_in_database = db.execute("SELECT videourl FROM google WHERE videourl = ?", video_url)
+            url_in_database = db.execute("SELECT videourl FROM youtube WHERE videourl = ?", video_url)
             if url_in_database != None:
                 db.execute("INSERT INTO youtube (videourl, videotitle, channelurl, channeltitle, caption, muscle) VALUES(?, ?, ?, ?, ?, ?)", video_url, video_title, channel_url, channel_title, caption, muscle)
 
