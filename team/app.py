@@ -37,4 +37,10 @@ def result():
         return render_template("apology.html", msg="そのような筋肉はありません。")
 
     else:
-        return render_template("result.html", muscle=muscle)
+        # Google、Instagram、YouTubeというテーブルから、その筋肉のデータを取得する
+        googles = db.execute("SELECT * FROM google WHERE muscle = ?", muscle)
+        instagrams = db.execute("SELECT * FROM instagram WHERE muscle = ?", muscle)
+        youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
+        return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
+
+
