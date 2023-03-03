@@ -6,6 +6,68 @@
 
 {% block main %}
     <div class="container">
-        <h1>{{ muscle }}</h1>
+        <h3>Google</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for google in googles %}
+                <tr>
+                    <td>{{ google["title"] }}</td>
+                    <td>{{ google["url"] }}</td>
+                    <td>{{ google["snippet"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Instagram</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mediaID</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instagram in instagrams %}
+                <tr></tr>
+                    <td>{{ instagram["media_id"] }}</td>
+                    <td>{{ instagram["url"] }}</td>
+                    <td>{{ instagram["caption"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>YouTube</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>チャンネル名</th>
+                    <th>チャンネルURL</th>
+                    <th>説明文</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for youtube in youtubes %}
+                <tr></tr>
+                    <td>{{ youtube["videotitle"] }}</td>
+                    <td>{{ youtube["videourl"] }}</td>
+                    <td>{{ youtube["channeltitle"] }}</td>
+                    <td>{{ youtube["channelurl"] }}</td>
+                    <td>{{ youtube["caption"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
