@@ -2,6 +2,9 @@ import os
 import datetime
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from helpers import login_required
 
 # Configure application
 app = Flask(__name__, static_folder='./templates/images')
@@ -24,9 +27,100 @@ def after_request(response):
 
 
 @app.route("/", methods=["GET", "POST"])
+@login_required
 def index():
+    user_id = session["user_id"]
     return render_template("index.html")
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return render_template("apology.html", msg="must provide username")
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return render_template("apology.html", msg="must provide password")
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+
+        # Ensure username exists
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return render_template("apology.html", msg="invalid username and/or password")
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        if not username:
+            return render_template("apology.html", msg="must provide username")
+
+        # Ensure password was submitted
+        if not password:
+            return render_template("apology.html", msg="must provide password")
+
+        if not confirmation:
+            return render_template("apology.html", msg="must provide confirmation")
+
+        if password != confirmation:
+            return render_template("apology.html", msg="passwords do not match")
+
+        hash = generate_password_hash(password)
+
+        # Ensure username does not exist
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if len(rows) >= 1:
+            return render_template("apology.html", msg="username already exists")
+
+        # Query database for username
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+
+        # Remember which user has logged in
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        session["user_id"] = rows[0]["id"]
+
+        return render_template("index.html")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register.html")
 
 @app.route("/result")
 def result():
