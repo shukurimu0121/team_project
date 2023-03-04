@@ -35,14 +35,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.after_request
-def after_request(response):
-    """Ensure responses aren't cached"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
-
 # インデックスページ
 @app.route("/", methods=["GET", "POST"])
 @login_required
@@ -98,7 +90,7 @@ def register():
         else:
             # 情報を挿入する
             password_hash = generate_password_hash(password)
-            db.execute("INSERT INTO users (name, hash, type) VALUES(?, ?, ?)", username, password_hash, usertype)
+            db.execute("INSERT INTO users (name, hash) VALUES(?, ?)", username, password_hash)
 
             # インデックスページにリダイレクトする
             return redirect("/")
