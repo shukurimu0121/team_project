@@ -47,6 +47,7 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    user_id = session["user_id"]
     return render_template("index.html")
 
 # お気に入り登録ページ
@@ -91,7 +92,7 @@ def register():
         # そのユーザー名が使われていないかチェック
         # ユーザーネームを調べる
         rows = db.execute("SELECT * FROM users WHERE name = ?", username)
-        if rows != None:
+        if len(rows) >= 1:
             return render_template("apology.html", msg="the username is already used")
 
         else:
