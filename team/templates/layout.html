@@ -13,19 +13,37 @@
 
         <!-- stylesheet -->
         <link href="/static/styles.css" rel="stylesheet">
-        <!--pushチェック-->
+
+        <!--リンク領域指定のある画像をレスポンシブ対応にするためのプラグイン-->
+        <!--https://hikopro.com/image-map/-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.js" integrity="sha256-MV/L2nrfaNYQUtnDja7Ok3sF1D5Rpviw/MUs76PX9nE=" crossorigin="anonymous"></script>
+
+        <!-- https://favicon.io/emoji-favicons/money-bag/ -->
+        <link href="/static/favicon.ico" rel="shortcut icon">
 
         <title>{% block title %}{% endblock %}</title>
 
     </head>
 
     <body>
-
-        <nav class="bg-light border navbar navbar-expand-md navbar-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">筋トレ</a>
+        <div class="header">
+                <nav class="bg-light border navbar navbar-expand-md navbar-light sticky-top">
+                    <div class="container-fluid" id="header_top">
+                        <a class="navbar-brand" href="/">Test</a>
+                        <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div id="header_nav">
+                            <ul class="navbar-nav me-auto mt-2 justify-content-center">
+                                <li class="nav-item"><a class="nav-link" href="/index" title="鍛えたい筋肉別表示">筋肉別</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/keyword" title="キーワード・鍛えたい目的別表示">キーワード・目的別</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/favorite" title="お気に入り一覧">お気に入り</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </nav>
 
         {% if get_flashed_messages() %}
             <header>
@@ -34,11 +52,14 @@
                 </div>
             </header>
         {% endif %}
+        </div>
 
         <main class="container-fluid py-5 text-center">
             {% block main %}{% endblock %}
         </main>
-
+        <script>
+            $('img[usemap]').rwdImageMaps();
+        </script>
     </body>
 
 </html>
