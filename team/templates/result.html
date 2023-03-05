@@ -2,13 +2,10 @@
 
 {% block style %}
 <style>
-    .heart{
+    #heart{
         color: white;
     }
 
-    .heart.clicked {
-        color: red;
-    }
 </style>
 {% endblock %}
 
@@ -37,7 +34,7 @@
                     <td>
                         <input id="googleid" name="googleid" type="hidden" value="{{ google['id']}}">
                         <input id="liked" name="liked" type="hidden" value="false">
-                        <input type="submit" class="heart" value="&hearts;">
+                        <button onclick="sendData()" id="heart">$hearts;</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -110,7 +107,7 @@
 
         if (liked == 'false') {
             heart.style.color = 'red';
-            fetch('/like', {
+            fetch('/likegoogle', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
