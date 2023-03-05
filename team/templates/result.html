@@ -103,46 +103,52 @@
         </table>
     </div>
     <script>
-        const heartButton = document.querySelector('.heart');
-        let isRed = false;
+        function sendData() {
+        var heart = document.getElementById('heart');
+        var liked = document.getElementById('liked').value;
+        var id = document.getElementById('id').value;
 
-        heartButton.addEventListener('click', function() {
-            if(isRed){
-                heartButton.classList.remove('clicked');
-
+        if (liked == 'false') {
+            heart.style.color = 'red';
+            fetch('/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'id=' + encodeURIComponent(id) + '&liked=true'
+            })
+            .then(response => {
+            if (response.ok) {
+                console.log('Data sent successfully');
+                document.getElementById('liked').value = 'true';
+            } else {
+                throw new Error('Network response was not ok');
             }
-            else{
-                heartButton.classList.add('clicked');
-                var googleid = document.getElementById('googleid').value;
-                var liked = document.getElementById('liked').value;
-
-                fetch('/likegoogle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'googleid=' + encodeURIComponent(googleid), "liked=" + encodeURIComponent(!liked)
-                })
-
-                .then(response => {
-                    if(response.ok){
-                        console.log('Data sent successfully');
-                        document.getElementById('liked').value = !liked;
-                    }
-
-                    else{
-                        throw new Error('Network response was not ok');
-                    }
-                })
-
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
+            })
+            .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            });
+        } else {
+            heart.style.color = 'white';
+            fetch('/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'id=' + encodeURIComponent(id) + '&liked=false'
+            })
+            .then(response => {
+            if (response.ok) {
+                console.log('Data sent successfully');
+                document.getElementById('liked').value = 'false';
+            } else {
+                throw new Error('Network response was not ok');
             }
-
-            isRed = !isRed;
-        });
-
-
+            })
+            .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+        }
     </script>
 {% endblock %}
