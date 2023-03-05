@@ -176,8 +176,12 @@ def likegoogle():
         if len(row) == 0:
             db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
 
+        # データベースに値がある時（お気に入り登録をしている時）
         else:
-            db.execute("")
+            db.execute("DELETE FROM likegoogle WHERE id = ?", google_id)
+
+        return redirect("/result")
+
 
 
 
