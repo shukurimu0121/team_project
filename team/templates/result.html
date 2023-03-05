@@ -35,7 +35,8 @@
                     <td><a href="{{ google['url'] }}">URL</a></td>
                     <td>{{ google["snippet"] }}</td>
                     <td>
-                        <input id=googleid name="googleid" type="hidden" value="{{ google['id']}}">
+                        <input id="googleid" name="googleid" type="hidden" value="{{ google['id']}}">
+                        <input id="liked" name="liked" type="hidden" value="false">
                         <button type="button" class="heart" value="&hearts;">
                     </td>
                 </tr>
@@ -108,23 +109,25 @@
         heartButton.addEventListener('click', function() {
             if(isRed){
                 heartButton.classList.remove('clicked');
-                
+
             }
             else{
                 heartButton.classList.add('clicked');
                 var googleid = document.getElementById('googleid').value;
+                var liked = document.getElementById('liked').value;
 
                 fetch('/likegoogle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: 'googleid=' + encodeURIComponent(googleid)
+                    body: 'googleid=' + encodeURIComponent(googleid), "liked=" + encodeURIComponent(!liked)
                 })
 
                 .then(response => {
                     if(response.ok){
                         console.log('Data sent successfully');
+                        document.getElementById('liked').value = !liked;
                     }
 
                     else{
