@@ -161,26 +161,7 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
         return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
-@app.route("/likegoogle", methods=["GET", "POST"])
-def likegoogle():
-    # ユーザーのidをセッションから取得
-    user_id = session["user_id"]
-    if request.method == "POST":
-        # IDを取得し、データベースに挿入
-        google_id = request.form.get("id")
 
-        # データベースからそのユーザーのその投稿があるか確認
-        row = db.execute("SELECT id FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
-
-        # データベースに値がない時（お気に入り登録していない時）
-        if len(row) == 0:
-            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
-
-        # データベースに値がある時（お気に入り登録をしている時）
-        else:
-            db.execute("DELETE FROM likegoogle WHERE id = ?", google_id)
-
-        return redirect("/result")
 
 
 
