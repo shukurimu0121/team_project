@@ -117,7 +117,15 @@
         });
 
         function sendData(){
-            var = document.getElementsByName()
+            var google_id = document.getElementsByName("googleid")[0].value;
+
+            fetch('python_script.py', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: google_id
+            })
         }
     </script>
 {% endblock %}
