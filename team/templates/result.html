@@ -35,10 +35,8 @@
                     <td><a href="{{ google['url'] }}">URL</a></td>
                     <td>{{ google["snippet"] }}</td>
                     <td>
-                        <form action="/likegoogle" method="post">
-                            <input name="id" type="hidden" value="{{ google['id']}}">
-                            <input type="submit" class="heart" value="&hearts;">
-                        </form>
+                        <input name="googleid" type="hidden" value="{{ google['id']}}">
+                        <input type="submit" class="heart" value="&hearts;">
                     </td>
                 </tr>
                 {% endfor %}
@@ -64,7 +62,7 @@
                     <td>
                         <form action="/likeinstagram" method="post">
                             <input name="id" type="hidden" value="{{ instagram['id']}}">
-                            <button type="submit" class="heart" value="&hearts;">
+                            <button type="button" class="heart" value="&hearts;" onclick="sendData()">
                         </form>
                     </td>
                 </tr>
@@ -117,5 +115,9 @@
 
             isRed = !isRed;
         });
+
+        function sendData(){
+            var = document.getElementsByName()
+        }
     </script>
 {% endblock %}
