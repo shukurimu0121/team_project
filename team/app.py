@@ -163,8 +163,6 @@ def result():
 
 @app.route("/likegoogle", methods=["POST"])
 def likegoogle():
-    # 辞書
-    liked_dict = {}
     # ユーザーのidをセッションから取得
     user_id = session["user_id"]
 
@@ -172,11 +170,9 @@ def likegoogle():
     liked = request.form.get('liked', False)
     if google_id is not None:
         if liked == 'true':
-            liked_dict[id] = True
-            # ここで、データベースに追加する処理を記述する
+            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
         else:
-            liked_dict.pop(id, None)
-            # ここで、データベースから削除する処理を記述する
+            db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
         return 'success'
     else:
         return 'failure'
