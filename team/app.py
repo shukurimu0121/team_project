@@ -174,7 +174,10 @@ def likegoogle():
 
         # データベースに値がない時（お気に入り登録していない時）
         if len(row) == 0:
-            db.execute("INSERT INTO likegoogle VALUES(?, ?)")
+            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
+
+        else:
+            db.execute("")
 
 
 
