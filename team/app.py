@@ -168,7 +168,5 @@ def likegoogle():
     if request.method == "POST":
         # IDを取得し、データベースに挿入
         google_id = request.form.get("id")
-        if google_id:
-            # データベースに挿入し、resultページにリダイレクト
-            
+
 
