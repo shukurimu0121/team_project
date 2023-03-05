@@ -1,7 +1,7 @@
 import os
 import datetime
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -161,4 +161,16 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
         return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
+# cssを反映させるためのコード
+# https://elsammit-beginnerblg.hatenablog.com/entry/2021/05/13/222411#:~:text=%E7%8F%BE%E8%B1%A1-,javascript%E3%82%84css%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%A6%E3%82%82%E8%A1%A8%E7%A4%BA%E4%B8%8A,%E7%8A%B6%E6%85%8B%E3%81%8C%E5%8F%8D%E6%98%A0%E3%81%95%E3%82%8C%E3%82%8B%E3%80%82
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
 
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path, endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
