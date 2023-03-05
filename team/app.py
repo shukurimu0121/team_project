@@ -171,6 +171,10 @@ def likegoogle():
 
         # データベースからそのユーザーのその投稿があるか確認
         row = db.execute("SELECT id FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
-        
+
+        # データベースに値がない時（お気に入り登録していない時）
+        if len(row) == 0:
+            db.execute("INSERT INTO likegoogle VALUES(?, ?)")
+
 
 
