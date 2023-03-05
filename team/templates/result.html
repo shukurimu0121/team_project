@@ -1,22 +1,11 @@
 {% extends "layout.html" %}
 
 {% block style %}
-    <style>
-        .like-button {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background-color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .like-button.clicked {
-            background-color: red;
-        }
-    </style>
+<style>
+    .heart{
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block title %}
@@ -41,7 +30,12 @@
                     <td>{{ google["title"] }}</td>
                     <td><a href="{{ google['url'] }}">URL</a></td>
                     <td>{{ google["snippet"] }}</td>
-                    <td><button class="like-button" onclick="toggleLike()"></button></td>
+                    <td>
+                        <form action="/like" method="post">
+                            <input name="classid" type="hidden" value="{{ google['id']}}">
+                            <input type="submit" class="heart" value="&hearts;">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
