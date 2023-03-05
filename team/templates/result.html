@@ -34,7 +34,7 @@
                     <td>
                         <input id="googleid" name="googleid" type="hidden" value="{{ google['id']}}">
                         <input id="liked" name="liked" type="hidden" value="false">
-                        <input onclick="sendData() changeColor()" type="button" value="&hearts;">
+                        <input onclick="sendData()" type="button" value="&hearts;">
                     </td>
                 </tr>
                 {% endfor %}
@@ -105,6 +105,7 @@
         var id = document.getElementById('googleid').value;
 
         if (liked == 'false') {
+            heart.style.color = 'red';
             fetch('/likegoogle', {
             method: 'POST',
             headers: {
@@ -124,6 +125,7 @@
             console.error('There was a problem with the fetch operation:', error);
             });
         } else {
+            heart.style.color = 'white';
             fetch('/likegoogle', {
             method: 'POST',
             headers: {
@@ -143,10 +145,6 @@
             console.error('There was a problem with the fetch operation:', error);
             });
         }
-        }
-
-        function changeColor() {
-            
         }
     </script>
 {% endblock %}
