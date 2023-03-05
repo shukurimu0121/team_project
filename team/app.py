@@ -169,4 +169,8 @@ def likegoogle():
         # IDを取得し、データベースに挿入
         google_id = request.form.get("id")
 
+        # データベースからそのユーザーのその投稿があるか確認
+        row = db.execute("SELECT id FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
+        
+
 
