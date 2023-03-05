@@ -161,7 +161,33 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
         return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
+@app.route("/likegoogle", methods=["POST"])
+def likegoogle():
+    # ユーザーのidをセッションから取得
+    user_id = session["user_id"]
+    # IDを取得し、データベースに挿入
+    google_id = request.form.get("googleid")
+    liked = request.form.get("liked", False)
+    if liked == "true":
+        liked = True
+    else:
+        liked = False
 
+    liked = not liked
+
+    if liked == True:
+        # お気に入り登録をする
+        try:
+            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
+        except:
+            return render_template("apology.html", msg="お気に入り登録失敗")
+
+    else:
+        # お気に入り登録を削除する
+        try:
+            db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
+        except:
+            return render_template("apology.html", msg="お気に入り登録解除失敗")
 
 
 
