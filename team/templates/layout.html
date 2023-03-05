@@ -26,7 +26,7 @@
     <body>
         <div class="header">
                 <nav class="bg-light border navbar navbar-expand-md navbar-light sticky-top">
-                    <div class="container-fluid" id="header_top">
+                    <div class="container-fluid d-flex" id="header_top">
                         <a class="navbar-brand" href="/">筋トレ</a>
                         <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                             <span class="navbar-toggler-icon"></span>
@@ -34,8 +34,11 @@
                         <div class="collapse navbar-collapse" id="navbar">
                             {% if session["user_id"] %}
                                 <ul class="navbar-nav me-auto mt-2 justify-content-center">
-                                    <li class="nav-item"><a class="nav-link" href="keyword" title="キーワード・鍛えたい目的別表示">キーワード・目的別</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="favorite" title="お気に入り一覧">お気に入り</a></li>
+                                    <ul class="navbar-nav me-auto mt-2 justify-content-center">
+                                        <li class="navbar-text"><a class="nav-link" href="/index" title="鍛えたい筋肉別表示">筋肉別</a></li>
+                                        <li class="navbar-text"><a class="nav-link" href="/keyword" title="キーワード・鍛えたい目的別表示">キーワード・目的別</a></li>
+                                        <li class="navbar-text"><a class="nav-link" href="/favorite" title="お気に入り一覧">お気に入り</a></li>
+                                    </ul>
                                 </ul>
                                 <ul class="navbar-nav ms-auto mt-2">
                                     <li class="nav-item"><a class="nav-link" href="logout">Log Out</a></li>
@@ -48,8 +51,9 @@
                             {% endif %}
                         </div>
                     </div>
-                </nav>
-            </div>
+                </div>
+            </nav>
+        </div>
 
         {% if get_flashed_messages() %}
             <header>
