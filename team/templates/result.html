@@ -5,6 +5,7 @@
     .heart{
         color: white;
     }
+    
 </style>
 {% endblock %}
 
@@ -31,7 +32,7 @@
                     <td><a href="{{ google['url'] }}">URL</a></td>
                     <td>{{ google["snippet"] }}</td>
                     <td>
-                        <form action="/like" method="post">
+                        <form action="/likegoogle" method="post">
                             <input name="classid" type="hidden" value="{{ google['id']}}">
                             <input type="submit" class="heart" value="&hearts;">
                         </form>
@@ -48,6 +49,7 @@
                     <th>mediaID</th>
                     <th>URL</th>
                     <th>説明文</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +58,12 @@
                     <td>{{ instagram["media_id"] }}</td>
                     <td><a href="{{ instagram['url'] }}">URL</a></td>
                     <td>{{ instagram["caption"] }}</td>
+                    <td>
+                        <form action="/likeinstagram" method="post">
+                            <input name="classid" type="hidden" value="{{ instagram['id']}}">
+                            <input type="submit" class="heart" value="&hearts;">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -70,6 +78,7 @@
                     <th>チャンネル名</th>
                     <th>チャンネルURL</th>
                     <th>説明文</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +89,12 @@
                     <td>{{ youtube["channeltitle"] }}</td>
                     <td><a href="{{ youtube['channelurl'] }}">URL</a></td>
                     <td>{{ youtube["caption"] }}</td>
+                    <td>
+                        <form action="/likeyoutube" method="post">
+                            <input name="classid" type="hidden" value="{{ youtube['id']}}">
+                            <input type="submit" class="heart" value="&hearts;">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
