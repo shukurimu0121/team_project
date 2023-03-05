@@ -163,31 +163,23 @@ def result():
 
 @app.route("/likegoogle", methods=["POST"])
 def likegoogle():
+    # 辞書
+    liked_dict = {}
     # ユーザーのidをセッションから取得
     user_id = session["user_id"]
-    # IDを取得し、データベースに挿入
-    google_id = request.form.get("googleid")
-    liked = request.form.get("liked", False)
-    if liked == "true":
-        liked = True
+
+    google_id = request.form.get('id', None)
+    liked = request.form.get('liked', False)
+    if google_id is not None:
+        if liked == 'true':
+            liked_dict[id] = True
+            # ここで、データベースに追加する処理を記述する
+        else:
+            liked_dict.pop(id, None)
+            # ここで、データベースから削除する処理を記述する
+        return 'success'
     else:
-        liked = False
-
-    liked = not liked
-
-    if liked == True:
-        # お気に入り登録をする
-        try:
-            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
-        except:
-            return render_template("apology.html", msg="お気に入り登録失敗")
-
-    else:
-        # お気に入り登録を削除する
-        try:
-            db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
-        except:
-            return render_template("apology.html", msg="お気に入り登録解除失敗")
+        return 'failure'
 
 
 
