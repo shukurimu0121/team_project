@@ -105,9 +105,17 @@
     </div>
     <script>
         const heartButton = document.querySelector('.heart');
+        let isRed = false;
 
         heartButton.addEventListener('click', function() {
-            heartButton.classList.toggle('clicked');
+            if(isRed){
+                heartButton.classList.remove('clicked');
+            }
+            else{
+                heartButton.classList.add('clicked');
+            }
+
+            isRed = !isRed;
         });
     </script>
 {% endblock %}
