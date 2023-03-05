@@ -103,7 +103,7 @@
         function sendData() {
         var heart = document.getElementById('heart');
         var liked = document.getElementById('liked').value;
-        var id = document.getElementById('id').value;
+        var id = document.getElementById('googleid').value;
 
         if (liked == 'false') {
             heart.style.color = 'red';
@@ -127,7 +127,7 @@
             });
         } else {
             heart.style.color = 'white';
-            fetch('/like', {
+            fetch('/likegoogle', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
