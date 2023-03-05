@@ -36,7 +36,7 @@
                     <td>{{ google["snippet"] }}</td>
                     <td>
                         <form action="/likegoogle" method="post">
-                            <input name="classid" type="hidden" value="{{ google['id']}}">
+                            <input name="id" type="hidden" value="{{ google['id']}}">
                             <input type="submit" class="heart" value="&hearts;">
                         </form>
                     </td>
@@ -63,7 +63,7 @@
                     <td>{{ instagram["caption"] }}</td>
                     <td>
                         <form action="/likeinstagram" method="post">
-                            <input name="classid" type="hidden" value="{{ instagram['id']}}">
+                            <input name="id" type="hidden" value="{{ instagram['id']}}">
                             <input type="submit" class="heart" value="&hearts;">
                         </form>
                     </td>
@@ -94,7 +94,7 @@
                     <td>{{ youtube["caption"] }}</td>
                     <td>
                         <form action="/likeyoutube" method="post">
-                            <input name="classid" type="hidden" value="{{ youtube['id']}}">
+                            <input name="id" type="hidden" value="{{ youtube['id']}}">
                             <input type="submit" class="heart" value="&hearts;">
                         </form>
                     </td>

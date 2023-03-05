@@ -161,4 +161,11 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
         return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
+@app.route("/likegoogle", methods=["GET", "POST"])
+def likegoogle():
+    # ユーザーのidをセッションから取得
+    user_id = session["user_id"]
+    if request.method == "POST":
+        # IDを取得し、データベースに挿入
+        id = request.form.get("id")
 
