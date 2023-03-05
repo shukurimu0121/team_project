@@ -5,7 +5,10 @@
     .heart{
         color: white;
     }
-    
+
+    .heart.clicked {
+        color: red;
+    }
 </style>
 {% endblock %}
 
@@ -100,4 +103,11 @@
             </tbody>
         </table>
     </div>
+    <script>
+        const heartButton = document.querySelector('.heart');
+
+        heartButton.addEventListener('click', function() {
+            heartButton.classList.toggle('clicked');
+        });
+    </script>
 {% endblock %}
