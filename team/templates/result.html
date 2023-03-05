@@ -35,10 +35,8 @@
                     <td><a href="{{ google['url'] }}">URL</a></td>
                     <td>{{ google["snippet"] }}</td>
                     <td>
-                        <form action="/likegoogle" method="post">
-                            <input name="id" type="hidden" value="{{ google['id']}}">
-                            <input type="submit" class="heart" value="&hearts;">
-                        </form>
+                        <input id=googleid name="googleid" type="hidden" value="{{ google['id']}}">
+                        <button type="button" class="heart" value="&hearts;">
                     </td>
                 </tr>
                 {% endfor %}
@@ -113,9 +111,34 @@
             }
             else{
                 heartButton.classList.add('clicked');
+                var googleid = document.getElementById('googleid').value;
+
+                fetch('/likegoogle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'googleid=' + encodeURIComponent(googleid)
+                })
+
+                .then(response => {
+                    if(response.ok){
+                        console.log('Data sent successfully');
+                    }
+
+                    else{
+                        throw new Error('Network response was not ok');
+                    }
+                })
+
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
             }
 
             isRed = !isRed;
         });
+
+
     </script>
 {% endblock %}
