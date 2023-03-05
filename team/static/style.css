@@ -1,0 +1,40 @@
+body {
+    background: #FAF0E6;
+}
+
+.header {
+    float: left;
+    background:white;
+    border: 1px solid black;
+}
+
+.main {
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.purpose {
+    border: 3px double black;
+    background: #40E0D0;
+}
+
+.keyword {
+    background: #ffff00;
+}
+
+.item {
+    border-bottom: 1px dotted blue;
+}
+
+.image {
+    padding-top: 7px;
+    height: 350px;
+    width: 500px;
+}
+
+.footer {
+    border: 1px solid black;
+    float: right;
+}
