@@ -161,22 +161,32 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
         return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
-@app.route("/likegoogle", methods=["POST"])
-def likegoogle():
-    # ユーザーのidをセッションから取得
+@app.route('/likegoogle/<int:id>', methods=['POST', 'DELETE'])
+def toggle_likegoogle(id):
     user_id = session["user_id"]
+    if request.method == 'POST':
+        db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, id)
+    elif request.method == 'DELETE':
+        db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, id)
+    return '', 204
 
-    google_id = request.form.get('id', None)
-    liked = request.form.get('liked', False)
-    if google_id is not None:
-        if liked == 'true':
-            db.execute("INSERT INTO likegoogle (user_id, google_id) VALUES(?, ?)", user_id, google_id)
-        else:
-            db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, google_id)
-        return 'success'
-    else:
-        return 'failure'
+@app.route('/likeinstagram/<int:id>', methods=['POST', 'DELETE'])
+def toggle_likeinstagram(id):
+    user_id = session["user_id"]
+    if request.method == 'POST':
+        db.execute("INSERT INTO likeinstagram (user_id, instagram_id) VALUES(?, ?)", user_id, id)
+    elif request.method == 'DELETE':
+        db.execute("DELETE FROM likeinstagram WHERE user_id = ? AND instagram_id = ?", user_id, id)
+    return '', 204
 
+@app.route('/likeyoutube/<int:id>', methods=['POST', 'DELETE'])
+def toggle_likeyoutube(id):
+    user_id = session["user_id"]
+    if request.method == 'POST':
+        db.execute("INSERT INTO likeyoutube (user_id, youtube_id) VALUES(?, ?)", user_id, id)
+    elif request.method == 'DELETE':
+        db.execute("DELETE FROM likeyoutube WHERE user_id = ? AND youtube_id = ?", user_id, id)
+    return '', 204
 
 
 
