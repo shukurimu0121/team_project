@@ -172,10 +172,10 @@ def result():
         youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
 
         # そのユーザーが既にお気に入り登録しているもののIDを取得する
-        google_ids = db.execute("SELECT google_id from likegoogle WHERE user_id = ?", user_id)
-        instagram_ids = db.execute("SELECT instagram_id from likeinstagram WHERE user_id = ?", user_id)
-        youtube_ids = db.execute("SELECT youtube_id from likeyoutube WHERE user_id = ?", user_id)
-        return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes, googleids=google_ids, instagramids=instagram_ids, youtubeids=youtube_ids)
+        googleids = db.execute("SELECT google_id from likegoogle WHERE user_id = ?", user_id)
+        instagramids = db.execute("SELECT instagram_id from likeinstagram WHERE user_id = ?", user_id)
+        youtubeids = db.execute("SELECT youtube_id from likeyoutube WHERE user_id = ?", user_id)
+        return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes, googleids=googleids, instagramids=instagramids, youtubeids=youtubeids)
 
 @app.route('/likegoogle/<int:id>', methods=['POST', 'DELETE'])
 def toggle_likegoogle(id):
