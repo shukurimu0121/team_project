@@ -158,6 +158,7 @@ def logout():
 @app.route("/result")
 @login_required
 def result():
+    user_id = session["user_id"]
     # 筋肉一覧
     MUSCLES = ["胸鎖乳突筋", "大胸筋", "上腕二頭筋", "前鋸筋", "外腹斜筋", "腹直筋", "内転筋群", "大腿四頭筋", "前脛骨筋", "僧帽筋", "三角筋", "広背筋", "前腕伸筋群", "前腕屈筋群", "下腿三頭筋", "棘下筋", "上腕三頭筋", "脊柱起立筋", "大腿筋", "ハムストリングス"]
     muscle = request.args.get("muscle")
