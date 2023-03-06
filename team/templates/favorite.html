@@ -45,7 +45,7 @@
                     <td>{{ google["snippet"] }}</td>
                     <td>
                         <div class="post" data-id="{{ google['id'] }}">
-                            <button class="likegoogle-btn">&hearts;</button>
+                            <button class="likegoogle-btn active">&hearts;</button>
                         </div>
                     </td>
                 </tr>
@@ -71,7 +71,7 @@
                     <td>{{ instagram["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ instagram['id'] }}">
-                            <button class="likeinstagram-btn">&hearts;</button>
+                            <button class="likeinstagram-btn active">&hearts;</button>
                         </div>
                     </td>
                 </tr>
@@ -101,7 +101,7 @@
                     <td>{{ youtube["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ youtube['id'] }}">
-                            <button class="likeyoutube-btn">&hearts;</button>
+                            <button class="likeyoutube-btn active">&hearts;</button>
                         </div>
                     </td>
                 </tr>
@@ -165,5 +165,4 @@
         });
         });
     </script>
-    </div>
 {% endblock %}
