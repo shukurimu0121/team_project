@@ -45,7 +45,8 @@
                     <td>{{ google["snippet"] }}</td>
                     <td>
                         <div class="post" data-id="{{ google['id'] }}">
-                            <button class="likegoogle-btn">&hearts;</button>
+                            {% if {{ google['id']}} in googleids %}
+                            <button class="likegoogle-btn active">&hearts;</button>
                         </div>
                     </td>
                 </tr>
