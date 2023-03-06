@@ -45,7 +45,7 @@
                     <td>{{ google["snippet"] }}</td>
                     <td>
                         <div class="post" data-id="{{ google['id'] }}">
-                            {% if {{ google['id']}} in googleids %}
+                            {% if google|id in googleids %}
                                 <button class="likegoogle-btn active">&hearts;</button>
                             {% else %}
                                 <button class="likegoogle-btn">&hearts;</button>
@@ -75,7 +75,7 @@
                     <td>{{ instagram["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ instagram['id'] }}">
-                            {% if {{ instagram['id']}} in instagramids %}
+                            {% if instagram|id in instagramids %}
                                 <button class="likeinstagram-btn active">&hearts;</button>
                             {% else %}
                                 <button class="likeinstagram-btn">&hearts;</button>
@@ -109,7 +109,7 @@
                     <td>{{ youtube["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ youtube['id'] }}">
-                            {% if {{ youtube['id']}} in youtubeids %}
+                            {% if youtube|id in youtubeids %}
                                 <button class="likeyoutube-btn active">&hearts;</button>
                             {% else %}
                                 <button class="likeyoutube-btn">&hearts;</button>
