@@ -46,7 +46,10 @@
                     <td>
                         <div class="post" data-id="{{ google['id'] }}">
                             {% if {{ google['id']}} in googleids %}
-                            <button class="likegoogle-btn active">&hearts;</button>
+                                <button class="likegoogle-btn active">&hearts;</button>
+                            {% else %}
+                                <button class="likegoogle-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -72,7 +75,11 @@
                     <td>{{ instagram["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ instagram['id'] }}">
-                            <button class="likeinstagram-btn">&hearts;</button>
+                            {% if {{ instagram['id']}} in instagramids %}
+                                <button class="likeinstagram-btn active">&hearts;</button>
+                            {% else %}
+                                <button class="likeinstagram-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -102,7 +109,11 @@
                     <td>{{ youtube["caption"] }}</td>
                     <td>
                         <div class="post" data-id="{{ youtube['id'] }}">
-                            <button class="likeyoutube-btn">&hearts;</button>
+                            {% if {{ youtube['id']}} in youtubeids %}
+                                <button class="likeyoutube-btn active">&hearts;</button>
+                            {% else %}
+                                <button class="likeyoutube-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
