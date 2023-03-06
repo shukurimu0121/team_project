@@ -1,11 +1,169 @@
 {% extends "layout.html" %}
 
+{% block style %}
+<style>
+    .likegoogle-btn{
+        color: white;
+    }
+
+    .likeinstagram-btn{
+        color: white;
+    }
+
+    .likeyoutube-btn{
+        color: white;
+    }
+
+    .active{
+        color: red;
+    }
+
+</style>
+{% endblock %}
+
 {% block title %}
     お気に入り一覧
 {% endblock %}
 
 {% block main %}
     <div class="container">
+        <h3>Google</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for google in googles %}
+                <tr>
+                    <td>{{ google["title"] }}</td>
+                    <td><a href="{{ google['url'] }}">URL</a></td>
+                    <td>{{ google["snippet"] }}</td>
+                    <td>
+                        <div class="post" data-id="{{ google['id'] }}">
+                            <button class="likegoogle-btn">&hearts;</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+        <h3>Instagram</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mediaID</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instagram in instagrams %}
+                <tr></tr>
+                    <td>{{ instagram["media_id"] }}</td>
+                    <td><a href="{{ instagram['url'] }}">URL</a></td>
+                    <td>{{ instagram["caption"] }}</td>
+                    <td>
+                        <div class="post" data-id="{{ instagram['id'] }}">
+                            <button class="likeinstagram-btn">&hearts;</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>YouTube</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>チャンネル名</th>
+                    <th>チャンネルURL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for youtube in youtubes %}
+                <tr></tr>
+                    <td>{{ youtube["videotitle"] }}</td>
+                    <td><a href="{{ youtube['videourl'] }}">URL</a></td>
+                    <td>{{ youtube["channeltitle"] }}</td>
+                    <td><a href="{{ youtube['channelurl'] }}">URL</a></td>
+                    <td>{{ youtube["caption"] }}</td>
+                    <td>
+                        <div class="post" data-id="{{ youtube['id'] }}">
+                            <button class="likeyoutube-btn">&hearts;</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const likegoogleBtns = document.querySelectorAll('.likegoogle-btn');
+        const likeinstagramBtns = document.querySelectorAll('.likeinstagram-btn');
+        const likeyoutubeBtns = document.querySelectorAll('.likeyoutube-btn');
+
+        // googleのお気に入りボタンが押された時
+        likegoogleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const post = btn.closest('.post');
+            const id = post.dataset.id;
+            const isActive = btn.classList.contains('active');
+
+            // ハートの色を切り替える
+            btn.classList.toggle('active');
+
+            // PythonのAPIエンドポイントにIDを追加または削除する
+            fetch(`/likegoogle/${id}`, {
+            method: isActive ? 'DELETE' : 'POST',
+            });
+        });
+        });
+
+        //instagramのお気に入りボタンが押された時
+        likeinstagramBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const post = btn.closest('.post');
+            const id = post.dataset.id;
+            const isActive = btn.classList.contains('active');
+
+            // ハートの色を切り替える
+            btn.classList.toggle('active');
+
+            // PythonのAPIエンドポイントにIDを追加または削除する
+            fetch(`/likeinstagram/${id}`, {
+            method: isActive ? 'DELETE' : 'POST',
+            });
+        });
+        });
+
+        // youtubeのお気に入りボタンが押された時
+        likeyoutubeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const post = btn.closest('.post');
+            const id = post.dataset.id;
+            const isActive = btn.classList.contains('active');
+
+            // ハートの色を切り替える
+            btn.classList.toggle('active');
+
+            // PythonのAPIエンドポイントにIDを追加または削除する
+            fetch(`/likeyoutube/${id}`, {
+            method: isActive ? 'DELETE' : 'POST',
+            });
+        });
+        });
+    </script>
     </div>
 {% endblock %}
