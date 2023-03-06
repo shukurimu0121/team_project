@@ -43,10 +43,20 @@ def index():
     return render_template("index.html")
 
 # お気に入り登録ページ
-@app.route("/favorite", methods=["GET", "POST"])
+@app.route("/favorite")
 @login_required
 def favorite():
-    return render_template("favorite.html")
+    user_id = session["user_id"]
+    # likegoogleからデータを取得
+    googles = db.execute("SELECT * FROM likegoogle WHERE user_id = ?", user_id)
+
+    # likeinstagramからデータを取得
+    instagrams = db.execute("SELECT * FROM likeinstagram WHERE user_id = ?", user_id)
+
+    # likeyoutubeからデータを取得
+    youtubes = db.execute("SELECT * FROM likeyoutube WHERE user_id = ?", user_id)
+
+    return render_template("favorite.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
 # キーワードページ
 @app.route("/keyword", methods=["GET", "POST"])
