@@ -5,9 +5,10 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 from flask_session import Session
 from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
+import json
 
 # Configure application
-app = Flask(__name__, static_folder='./templates/images')
+app = Flask(__name__, static_folder='./static')
 app.secret_key = 'marimari'
 
 # Ensure templates are auto-reloaded
@@ -43,10 +44,33 @@ def index():
     return render_template("index.html")
 
 # お気に入り登録ページ
-@app.route("/favorite", methods=["GET", "POST"])
+@app.route("/favorite")
 @login_required
 def favorite():
-    return render_template("favorite.html")
+    user_id = session["user_id"]
+    # likegoogle,likeinstagram, likeyoutubeからそのユーザーがお気に入り登録したものを取得
+    googleids = db.execute("SELECT google_id FROM likegoogle WHERE user_id = ?", user_id)
+    instagramids = db.execute("SELECT instagram_id FROM likeinstagram WHERE user_id = ?", user_id)
+    youtubeids = db.execute("SELECT youtube_id FROM likeyoutube WHERE user_id = ?", user_id)
+
+    #それを値のみのリストにする
+    googleids_vals = [i.get("google_id") for i in googleids]
+    instagramids_vals = [i.get("instagram_id") for i in instagramids]
+    youtubeids_vals = [i.get("youtube_id") for i in youtubeids]
+    googles = []
+    instagrams = []
+    youtubes = []
+    #それぞれのidsに含まれているもののデータを取得する
+    for i in range(len(googleids_vals)):
+        googles = db.execute("SELECT * FROM google WHERE id =?", googleids_vals[i])
+
+    for j in range(len(instagramids_vals)):
+        instagrams = db.execute("SELECT * FROM instagram WHERE id = ?", instagramids_vals[j])
+
+    for k in range(len(youtubeids_vals)):
+        youtubes = db.execute("SELECT * FROM youtube WHERE id = ?", youtubeids_vals[k])
+
+    return render_template("favorite.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
 # キーワードページ
 @app.route("/keyword", methods=["GET", "POST"])
@@ -135,7 +159,7 @@ def login():
         return render_template("login.html")
 
 # ログアウト
-@app.route("/logout", methods=["GET", "POST"])
+@app.route("/logout", methods=["GET"])
 def logout():
     # 全てのセッションをクリア
     session.clear()
@@ -145,18 +169,23 @@ def logout():
 
 
 # 結果表示ページ
-@app.route("/result")
+@app.route("/result", methods=["GET"])
 @login_required
 def result():
-    # 筋肉一覧
-    MUSCLES = ["胸鎖乳突筋", "大胸筋", "上腕二頭筋", "前鋸筋", "外腹斜筋", "腹直筋", "内転筋群", "大腿四頭筋", "前脛骨筋", "僧帽筋", "三角筋", "広背筋", "前腕伸筋群", "前腕屈筋群", "下腿三頭筋", "棘下筋", "上腕三頭筋", "脊柱起立筋", "大腿筋", "ハムストリングス"]
+    user_id = session["user_id"]
     muscle = request.args.get("muscle")
-    if muscle not in MUSCLES:
-        return render_template("apology.html", msg="そのような筋肉はありません。")
 
-    else:
-        # Google、Instagram、YouTubeというテーブルから、その筋肉のデータを取得する
-        googles = db.execute("SELECT * FROM google WHERE muscle = ?", muscle)
-        instagrams = db.execute("SELECT * FROM instagram WHERE muscle = ?", muscle)
-        youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
-        return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
+    # Google、Instagram、YouTubeというテーブルから、その筋肉のデータを取得する
+    googles = db.execute("SELECT * FROM google WHERE muscle = ?", muscle)
+    instagrams = db.execute("SELECT * FROM instagram WHERE muscle = ?", muscle)
+    youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
+
+    # 既にデータベースに追加されているデータを送る
+    googleids = db.execute("SELECT google_id FROM likegoogle WHERE user_id = ?", user_id)
+    googleids_vals = [i.get("google_id") for i in googleids]
+    instagramids = db.execute("SELECT instagram_id FROM likeinstagram WHERE user_id = ?", user_id)
+    instagramids_vals = [i.get("instagram_id") for i in instagramids]
+    youtubeids = db.execute("SELECT youtube_id FROM likeyoutube WHERE user_id = ?", user_id)
+    youtubeids_vals = [i.get("youtube_id") for i in youtubeids]
+
+    return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes, googleids=googleids_vals, instagramids=instagramids_vals, youtubeids=youtubeids_vals)

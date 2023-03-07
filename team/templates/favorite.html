@@ -1,11 +1,159 @@
 {% extends "layout.html" %}
 
+{% block style %}
+<style>
+    .like-google-btn {
+        color: white;
+    }
+
+    .like-instagram-btn{
+        color: white;
+    }
+
+    .like-youtube-btn{
+        color: white;
+    }
+
+    .liked{
+        color: red;
+    }
+</style>
+{% endblock %}
+
 {% block title %}
-    お気に入り一覧
+    Favorite
 {% endblock %}
 
 {% block main %}
     <div class="container">
+        <h3>Google</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for google in googles %}
+                <tr>
+                    <td>{{ google["title"] }}</td>
+                    <td><a href="{{ google['url'] }}">URL</a></td>
+                    <td>{{ google["snippet"] }}</td>
+                    <td>
+                        <div class="post" data-post-id="{{ google['id'] }}">
+                            <button class="like-google-btn liked">&hearts;</button>
+                        </div>
+                    </td>
 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Instagram</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mediaID</th>
+                    <th>URL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instagram in instagrams %}
+                <tr></tr>
+                    <td>{{ instagram["media_id"] }}</td>
+                    <td><a href="{{ instagram['url'] }}">URL</a></td>
+                    <td>{{ instagram["caption"] }}</td>
+                    <td>
+                        <div class="post" data-post-id="{{ instagram['id'] }}">
+                            <button class="like-instagram-btn liked">&hearts;</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>YouTube</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>URL</th>
+                    <th>チャンネル名</th>
+                    <th>チャンネルURL</th>
+                    <th>説明文</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for youtube in youtubes %}
+                <tr></tr>
+                    <td>{{ youtube["videotitle"] }}</td>
+                    <td><a href="{{ youtube['videourl'] }}">URL</a></td>
+                    <td>{{ youtube["channeltitle"] }}</td>
+                    <td><a href="{{ youtube['channelurl'] }}">URL</a></td>
+                    <td>{{ youtube["caption"] }}</td>
+                    <td>
+                        <div class="post" data-post-id="{{ youtube['id'] }}">
+                            <button class="like-youtube-btn liked">&hearts;</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <script>
+        // ハートボタンがクリックされた時の処理(Google)
+        $(".like-google-btn").click(function() {
+        var postId = $(this).closest(".post").data("post-id");
+        $(this).toggleClass("liked");
+        if ($(this).hasClass("liked")) {
+            $.post("/likegoogle", {post_id: postId});
+        } else {
+            $.ajax({
+            url: "/likegoogle",
+            type: "DELETE",
+            data: {post_id: postId},
+            });
+        }
+        });
+
+        // ハートボタンがクリックされた時の処理(Instagram)
+        $(".like-instagram-btn").click(function() {
+        var postId = $(this).closest(".post").data("post-id");
+        $(this).toggleClass("liked");
+        if ($(this).hasClass("liked")) {
+            $.post("/likeinstagram", {post_id: postId});
+        } else {
+            $.ajax({
+            url: "/likeinstagram",
+            type: "DELETE",
+            data: {post_id: postId},
+            });
+        }
+        });
+
+        // ハートボタンがクリックされた時の処理(YouTube)
+        $(".like-youtube-btn").click(function() {
+        var postId = $(this).closest(".post").data("post-id");
+        $(this).toggleClass("liked");
+        if ($(this).hasClass("liked")) {
+            $.post("/likeyoutube", {post_id: postId});
+        } else {
+            $.ajax({
+            url: "/likeyoutube",
+            type: "DELETE",
+            data: {post_id: postId},
+            });
+        }
+        });
+    </script>
+
 {% endblock %}
