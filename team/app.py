@@ -141,7 +141,7 @@ def login():
         return render_template("login.html")
 
 # ログアウト
-@app.route("/logout", methods=["GET", "POST"])
+@app.route("/logout", methods=["GET"])
 def logout():
     # 全てのセッションをクリア
     session.clear()
@@ -151,24 +151,31 @@ def logout():
 
 
 # 結果表示ページ
-@app.route("/result")
+@app.route("/result", methods=["GET"])
 @login_required
 def result():
     user_id = session["user_id"]
-    # 筋肉一覧
-    MUSCLES = ["胸鎖乳突筋", "大胸筋", "上腕二頭筋", "前鋸筋", "外腹斜筋", "腹直筋", "内転筋群", "大腿四頭筋", "前脛骨筋", "僧帽筋", "三角筋", "広背筋", "前腕伸筋群", "前腕屈筋群", "下腿三頭筋", "棘下筋", "上腕三頭筋", "脊柱起立筋", "大腿筋", "ハムストリングス"]
     muscle = request.args.get("muscle")
 
     # Google、Instagram、YouTubeというテーブルから、その筋肉のデータを取得する
     googles = db.execute("SELECT * FROM google WHERE muscle = ?", muscle)
     instagrams = db.execute("SELECT * FROM instagram WHERE muscle = ?", muscle)
     youtubes = db.execute("SELECT * FROM youtube WHERE muscle = ?", muscle)
-    return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
+
+    # 既にデータベースに追加されているデータを送る
+    googleids = db.execute("SELECT google_id FROM likegoogle WHERE user_id = ?", user_id)
+    googleids_vals = [i.get("google_id") for i in googleids]
+    instagramids = db.execute("SELECT instagram_id FROM likeinstagram WHERE user_id = ?", user_id)
+    instagramids_vals = [i.get("instagram_id") for i in instagramids]
+    youtubeids = db.execute("SELECT youtube_id FROM likeyoutube WHERE user_id = ?", user_id)
+    youtubeids_vals = [i.get("youtube_id") for i in youtubeids]
+
+    return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes, googleids=googleids_vals, instagramids=instagramids_vals, youtubeids=youtubeids_vals)
 
 
 
-@app.route("/like", methods=["POST", "DELETE"])
-def like():
+@app.route("/likegoogle", methods=["POST", "DELETE"])
+def likegoogle():
     user_id =session["user_id"]
     if request.method == "POST":
         post_id = request.form["post_id"]
@@ -176,5 +183,27 @@ def like():
     elif request.method == "DELETE":
         post_id = request.form["post_id"]
         db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, post_id)
+    return "OK"
+
+@app.route("/likeinstagram", methods=["POST", "DELETE"])
+def likeinstagram():
+    user_id =session["user_id"]
+    if request.method == "POST":
+        post_id = request.form["post_id"]
+        db.execute("INSERT INTO likeinstagram(user_id, instagram_id) VALUES(?, ?)", user_id, post_id)
+    elif request.method == "DELETE":
+        post_id = request.form["post_id"]
+        db.execute("DELETE FROM likeinstagram WHERE user_id = ? AND instagram_id = ?", user_id, post_id)
+    return "OK"
+
+@app.route("/likeyoutube", methods=["POST", "DELETE"])
+def likeyoutube():
+    user_id =session["user_id"]
+    if request.method == "POST":
+        post_id = request.form["post_id"]
+        db.execute("INSERT INTO likeyoutube(user_id, youtube_id) VALUES(?, ?)", user_id, post_id)
+    elif request.method == "DELETE":
+        post_id = request.form["post_id"]
+        db.execute("DELETE FROM likeyoutube WHERE user_id = ? AND youtube_id = ?", user_id, post_id)
     return "OK"
 

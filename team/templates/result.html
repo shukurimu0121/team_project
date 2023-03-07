@@ -2,7 +2,15 @@
 
 {% block style %}
 <style>
-    .like-btn{
+    .like-google-btn {
+        color: white;
+    }
+
+    .like-instagram-btn{
+        color: white;
+    }
+
+    .like-youtube-btn{
         color: white;
     }
 
@@ -36,9 +44,14 @@
                     <td>{{ google["snippet"] }}</td>
                     <td>
                         <div class="post" data-post-id="{{ google['id'] }}">
-                            <button class="like-btn">&hearts;</button>
+                            {% if google["id"] in googleids %}
+                            <button class="like-google-btn liked">&hearts;</button>
+                            {% else %}
+                            <button class="like-google-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
+
                 </tr>
                 {% endfor %}
             </tbody>
@@ -61,8 +74,12 @@
                     <td><a href="{{ instagram['url'] }}">URL</a></td>
                     <td>{{ instagram["caption"] }}</td>
                     <td>
-                        <div class="post" data-id="{{ instagram['id'] }}">
-                            <button class="likeyoutube-btn">&hearts;</button>
+                        <div class="post" data-post-id="{{ instagram['id'] }}">
+                            {% if instagram["id"] in instagramids %}
+                            <button class="like-instagram-btn liked">&hearts;</button>
+                            {% else %}
+                            <button class="like-instagram-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -91,8 +108,12 @@
                     <td><a href="{{ youtube['channelurl'] }}">URL</a></td>
                     <td>{{ youtube["caption"] }}</td>
                     <td>
-                        <div class="post" data-id="{{ youtube['id'] }}">
-                            <button class="likeyoutube-btn">&hearts;</button>
+                        <div class="post" data-post-id="{{ youtube['id'] }}">
+                            {% if youtube["id"] in youtubeids %}
+                            <button class="like-youtube-btn liked">&hearts;</button>
+                            {% else %}
+                            <button class="like-youtube-btn">&hearts;</button>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -101,15 +122,45 @@
         </table>
     </div>
     <script>
-        // ハートボタンがクリックされた時の処理
-        $(".like-btn").click(function() {
+        // ハートボタンがクリックされた時の処理(Google)
+        $(".like-google-btn").click(function() {
         var postId = $(this).closest(".post").data("post-id");
         $(this).toggleClass("liked");
         if ($(this).hasClass("liked")) {
-            $.post("/like", {post_id: postId});
+            $.post("/likegoogle", {post_id: postId});
         } else {
             $.ajax({
-            url: "/like",
+            url: "/likegoogle",
+            type: "DELETE",
+            data: {post_id: postId},
+            });
+        }
+        });
+
+        // ハートボタンがクリックされた時の処理(Instagram)
+        $(".like-instagram-btn").click(function() {
+        var postId = $(this).closest(".post").data("post-id");
+        $(this).toggleClass("liked");
+        if ($(this).hasClass("liked")) {
+            $.post("/likeinstagram", {post_id: postId});
+        } else {
+            $.ajax({
+            url: "/likeinstagram",
+            type: "DELETE",
+            data: {post_id: postId},
+            });
+        }
+        });
+
+        // ハートボタンがクリックされた時の処理(YouTube)
+        $(".like-youtube-btn").click(function() {
+        var postId = $(this).closest(".post").data("post-id");
+        $(this).toggleClass("liked");
+        if ($(this).hasClass("liked")) {
+            $.post("/likeyoutube", {post_id: postId});
+        } else {
+            $.ajax({
+            url: "/likeyoutube",
             type: "DELETE",
             data: {post_id: postId},
             });
