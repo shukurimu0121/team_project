@@ -48,11 +48,29 @@ def index():
 @login_required
 def favorite():
     user_id = session["user_id"]
-    # likegoogleからデータを取得
-    googles = db.execute("SELECT * FROM likegoogle WHERE user_id = ?", user_id)
+    # likegoogle,likeinstagram, likeyoutubeからそのユーザーがお気に入り登録したものを取得
+    googleids = db.execute("SELECT google_id FROM likegoogle WHERE user_id = ?", user_id)
+    instagramids = db.execute("SELECT instagram_id FROM likeinstagram WHERE user_id = ?", user_id)
+    youtubeids = db.execute("SELECT youtube_id FROM likeyoutube WHERE user_id = ?", user_id)
 
+    #それを値のみのリストにする
+    googleids_vals = [i.get("google_id") for i in googleids]
+    instagramids_vals = [i.get("instagram_id") for i in instagramids]
+    youtubeids_vals = [i.get("youtube_id") for i in youtubeids]
+    googles = []
+    instagrams = []
+    youtubes = []
+    #それぞれのidsに含まれているもののデータを取得する
+    for i in range(len(googleids_vals)):
+        googles = db.execute("SELECT * FROM google WHERE id =?", googleids_vals[i])
 
-    return render_template("favorite.html", googles=googles)
+    for j in range(len(instagramids_vals)):
+        instagrams = db.execute("SELECT * FROM instagram WHERE id = ?", instagramids_vals[j])
+
+    for k in range(len(youtubeids_vals)):
+        youtubes = db.execute("SELECT * FROM youtube WHERE id = ?", youtubeids_vals[k])
+
+    return render_template("favorite.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
 # キーワードページ
 @app.route("/keyword", methods=["GET", "POST"])
