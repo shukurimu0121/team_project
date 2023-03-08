@@ -36,11 +36,18 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.after_request
+def after_request(response):
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
 # インデックスページ
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    user_id = session["user_id"]
     return render_template("index.html")
 
 # お気に入り登録ページ
@@ -165,7 +172,7 @@ def logout():
     session.clear()
 
     # ログインページにリダイレクト
-    return render_template("login.html")
+    return redirect("/login")
 
 
 # 結果表示ページ
@@ -189,3 +196,40 @@ def result():
     youtubeids_vals = [i.get("youtube_id") for i in youtubeids]
 
     return render_template("result.html", googles=googles, instagrams=instagrams, youtubes=youtubes, googleids=googleids_vals, instagramids=instagramids_vals, youtubeids=youtubeids_vals)
+
+
+@app.route("/likegoogle", methods=["POST", "DELETE"])
+def likegoogle():
+    user_id =session["user_id"]
+    if request.method == "POST":
+        post_id = request.form["post_id"]
+        db.execute("INSERT INTO likegoogle(user_id, google_id) VALUES(?, ?)", user_id, post_id)
+    elif request.method == "DELETE":
+        post_id = request.form["post_id"]
+        db.execute("DELETE FROM likegoogle WHERE user_id = ? AND google_id = ?", user_id, post_id)
+    return "OK"
+
+
+
+@app.route("/likeinstagram", methods=["POST", "DELETE"])
+def likeinstagram():
+    user_id =session["user_id"]
+    if request.method == "POST":
+        post_id = request.form["post_id"]
+        db.execute("INSERT INTO likeinstagram(user_id, instagram_id) VALUES(?, ?)", user_id, post_id)
+    elif request.method == "DELETE":
+        post_id = request.form["post_id"]
+        db.execute("DELETE FROM likeinstagram WHERE user_id = ? AND instagram_id = ?", user_id, post_id)
+    return "OK"
+
+
+@app.route("/likeyoutube", methods=["POST", "DELETE"])
+def likeyoutube():
+    user_id =session["user_id"]
+    if request.method == "POST":
+        post_id = request.form["post_id"]
+        db.execute("INSERT INTO likeyoutube(user_id, youtube_id) VALUES(?, ?)", user_id, post_id)
+    elif request.method == "DELETE":
+        post_id = request.form["post_id"]
+        db.execute("DELETE FROM likeyoutube WHERE user_id = ? AND youtube_id = ?", user_id, post_id)
+    return "OK"
