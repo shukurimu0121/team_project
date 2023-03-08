@@ -15,10 +15,12 @@ body {
 }
 
 .main {
-    text-align: center;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
-    max-width: 500px;
+}
+.container {
+    margin: 0 auto;
+    text-align: left;
 }
 
 .purpose {
@@ -61,14 +63,23 @@ body {
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
 }
 
+.center{
+    text-align: center;
+}
+
+.left{
+    text-align: left;
+}
+
 h1 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 游ゴシック, 'Montserrat', sans-serif;
     font-size: 15px;
 }
 
 h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 游ゴシック, 'Montserrat', sans-serif;
     font-size: 10px;
+    color: gray
 }
 
 h3 {
