@@ -69,14 +69,18 @@ def favorite():
     youtubes = []
     #それぞれのidsに含まれているもののデータを取得する
     for i in range(len(googleids_vals)):
-        googles = db.execute("SELECT * FROM google WHERE id =?", googleids_vals[i])
+        g_data = db.execute("SELECT * FROM google WHERE id =?", googleids_vals[i])
+        googles += g_data
 
     for j in range(len(instagramids_vals)):
-        instagrams = db.execute("SELECT * FROM instagram WHERE id = ?", instagramids_vals[j])
+        i_data = db.execute("SELECT * FROM instagram WHERE id = ?", instagramids_vals[j])
+        instagrams += i_data
 
     for k in range(len(youtubeids_vals)):
-        youtubes = db.execute("SELECT * FROM youtube WHERE id = ?", youtubeids_vals[k])
+        y_data = db.execute("SELECT * FROM youtube WHERE id = ?", youtubeids_vals[k])
+        youtubes += y_data
 
+    print(googles)
     return render_template("favorite.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
 # キーワードページ
