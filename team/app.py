@@ -66,7 +66,6 @@ def favorite():
         y_data = db.execute("SELECT * FROM youtube WHERE id = ?", youtubeids_vals[k])
         youtubes += y_data
 
-    print(googles)
     return render_template("favorite.html", googles=googles, instagrams=instagrams, youtubes=youtubes)
 
 # キーワードページ
